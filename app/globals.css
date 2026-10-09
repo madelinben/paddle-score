@@ -1,0 +1,14 @@
+@import "tailwindcss";
+
+html, body {
+  height: 100dvh;
+  width: 100vw;
+  overflow: hidden;
+  overscroll-behavior: none;
+  background: #f3f4f6;
+  color: #111827;
+  font-family: system-ui, sans-serif;
+  -webkit-tap-highlight-color: transparent;
+}
+
+button { touch-action: manipulation; }
