@@ -75,7 +75,7 @@ export default function Play() {
       ) : (
       <div className="grid grid-cols-[1fr_1fr_auto] gap-2">
         {([0, 1] as Team[]).map((t) => (
-          <button key={t} disabled={m.winner !== null} onClick={() => score(t)}
+          <button key={t} disabled={m.winner !== null || m.steps.length > 0} onClick={() => score(t)}
             className={`min-h-16 rounded-2xl px-2 text-white shadow-lg transition disabled:opacity-40 ${TEAM[t]}`}>
             <span className="block text-lg font-black leading-tight">+ Point</span>
             <span className="block truncate text-xs font-semibold opacity-90">{n[2 * t]} & {n[2 * t + 1]}</span>
@@ -89,7 +89,7 @@ export default function Play() {
       )}
 
       {step && (
-        <div className="fixed inset-0 z-10 flex items-end justify-center bg-ink/70 p-3 backdrop-blur-sm sm:items-center">
+        <div role="dialog" aria-modal="true" aria-label="Prompt" className="fixed inset-0 z-10 flex items-end justify-center bg-ink/70 p-3 backdrop-blur-sm sm:items-center">
           <div key={m.steps.length} className="w-full max-w-sm animate-sheet rounded-3xl bg-white p-5 shadow-2xl">
             <StepCard m={m} onNext={next} />
           </div>

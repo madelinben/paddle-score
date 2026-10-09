@@ -1,3 +1,3 @@
-:HL["/paddle-score/_next/static/chunks/16d6bbc6cuapn.css","style"]
+:HL["/paddle-score/_next/static/chunks/1c075f-aj5quz.css","style"]
 1:[["children",{"s":"__PAGE__","h":160}]]
-0:{"b":"9K-cf8Su911LX4xQlSTVE","t":{"t":{"s":"","h":80,"c":"$Q1"}}}
+0:{"b":"Uta9FWt0jRmT7spvROg-7","t":{"t":{"s":"","h":80,"c":"$Q1"}}}
