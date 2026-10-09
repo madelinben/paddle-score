@@ -1,5 +1,15 @@
 @import "tailwindcss";
 
+/* tablets, desktops and landscape phones: side-by-side layout */
+@custom-variant wide {
+  @media (min-width: 768px), (min-width: 640px) and (orientation: landscape) {
+    @slot;
+  }
+}
+
+/* short landscape screens: compact chrome */
+@custom-variant short (@media (max-height: 480px));
+
 @theme {
   --color-ink: #0b1d3a;
   --color-ball: #d9f100;

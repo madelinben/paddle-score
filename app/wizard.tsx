@@ -56,7 +56,7 @@ export default function Wizard({ onStart }: { onStart: (m: Match) => void }) {
   const firstServer = first ?? (serveTeam === null ? null : right[serveTeam]);
 
   return (
-    <div className="flex h-full flex-col">
+    <div className="mx-auto flex h-full w-full max-w-xl flex-col">
       <div className="flex items-center gap-2 px-3 pt-3">
         {hist.length > 0 && <button onClick={back} className="min-h-11 rounded-xl bg-slate-200 px-3 text-sm font-extrabold">← Back</button>}
         <div className="ml-auto flex gap-1.5" aria-label={`Step ${step} of ${ORDER.length}`}>

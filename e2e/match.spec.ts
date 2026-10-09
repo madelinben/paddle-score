@@ -205,3 +205,67 @@ test("tie-break at 6-6: rules prompt, server rotation, swap ends every 6 points,
   await drain(page, seen);
   expect(seen).toContain("Set to Alex & Sam");
 });
+
+const VIEWPORTS = [
+  ["small phone", 320, 568],
+  ["phone", 390, 780],
+  ["landscape phone", 667, 375],
+  ["tablet", 768, 1024],
+  ["laptop", 1280, 720],
+  ["desktop", 1920, 1080],
+] as const;
+
+for (const [name, width, height] of VIEWPORTS) {
+  test(`no page scroll or overflow on ${name} (${width}x${height})`, async ({ page }) => {
+    await page.setViewportSize({ width, height });
+    // Nothing the user needs may sit outside the viewport, and the page itself never scrolls.
+    // Long wizard/reference content may scroll inside its own card (allowed); everything else must fit.
+    const check = async (where: string, selectors: string[]) => {
+      await page.waitForTimeout(450); // let the prompt slide-in animation finish
+      const bad = await page.evaluate((sels) => {
+        const de = document.documentElement;
+        const out: string[] = [];
+        if (de.scrollWidth > innerWidth) out.push(`page scrollWidth ${de.scrollWidth}`);
+        if (de.scrollHeight > innerHeight) out.push(`page scrollHeight ${de.scrollHeight}`);
+        // "@content x": must sit inside the content area, i.e. not hidden under the header or nav.
+        const area = document.querySelector("main > div")!.getBoundingClientRect();
+        for (const raw of sels) {
+          const inContent = raw.startsWith("@content ");
+          const sel = inContent ? raw.slice(9) : raw;
+          document.querySelectorAll(sel).forEach((el) => {
+            const r = el.getBoundingClientRect();
+            if (inContent && r.width && (r.top < area.top - 0.5 || r.bottom > area.bottom + 0.5 || r.left < area.left - 0.5 || r.right > area.right + 0.5)) {
+              out.push(`${sel} outside content area: ${Math.round(r.top)}-${Math.round(r.bottom)} vs ${Math.round(area.top)}-${Math.round(area.bottom)}`);
+            }
+            if (!r.width || el.closest(".overflow-y-auto") !== null) return; // hidden or inside an internal scroller
+            if (r.left < -0.5 || r.top < -0.5 || r.right > innerWidth + 0.5 || r.bottom > innerHeight + 0.5) {
+              out.push(`${sel} "${(el.textContent ?? "").slice(0, 20)}" at ${Math.round(r.left)},${Math.round(r.top)}-${Math.round(r.right)},${Math.round(r.bottom)}`);
+            }
+          });
+        }
+        return out;
+      }, selectors);
+      expect(bad, where).toEqual([]);
+    };
+
+    await page.goto("./");
+    await check("wizard names", ["header", "nav", "nav button", "input", "button[role=switch]"]);
+    await page.getByRole("button", { name: /Next: the spin/ }).click();
+    await check("wizard spin", ["nav", "main button"]);
+    await page.getByRole("button", { name: /Alex & Sam/ }).click();
+    await page.getByRole("button", { name: /Serve first/ }).click();
+    await page.getByRole("button", { name: /Far end/ }).click();
+    await check("wizard positions", ["nav", "main button"]);
+    await page.getByRole("button", { name: /Start match/ }).click();
+    await check("serve prompt", ["[role=dialog] > div", "[role=dialog] button"]);
+    await ready(page);
+    await check("match", ["header", "nav", "@content svg[role=img]", "@content main > div button", "@content main > div p"]);
+    await score(page, "A", 4);
+    await check("game-end prompt", ["[role=dialog] > div", "[role=dialog] button"]);
+    await drain(page, []);
+    for (const tab of ["Rules", "Flow", "Scoring"]) {
+      await page.getByRole("button", { name: tab, exact: true }).click();
+      await check(`${tab} tab`, ["header", "nav", "nav button"]);
+    }
+  });
+}

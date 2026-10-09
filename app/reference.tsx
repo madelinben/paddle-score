@@ -33,7 +33,8 @@ const FLOW: [string, string, string[]][] = [
 
 export default function Reference({ tab }: { tab: Tab }) {
   return (
-    <div className="h-full space-y-3 overflow-y-auto p-3">
+    <div className="h-full overflow-y-auto">
+    <div className="mx-auto max-w-2xl space-y-3 p-3">
       {tab === "rules" && (
         <>
           <Card icon="🎾" title="The Serve">Underarm only. Let it bounce behind the service line, hit below the waist, aim diagonally. <b>2 attempts.</b></Card>
@@ -83,6 +84,7 @@ export default function Reference({ tab }: { tab: Tab }) {
           </div>
         </>
       )}
+    </div>
     </div>
   );
 }
