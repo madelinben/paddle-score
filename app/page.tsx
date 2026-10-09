@@ -3,28 +3,40 @@ import { useState } from "react";
 import Play from "./play";
 import Reference from "./reference";
 
+const I = {
+  play: <><circle cx="12" cy="12" r="9" /><path d="M18.4 5.6c-3.5 2.6-3.5 10.2 0 12.8M5.6 5.6c3.5 2.6 3.5 10.2 0 12.8" /></>,
+  rules: <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V3H6.5A2.5 2.5 0 0 0 4 5.5zM8 7h8M8 11h6" />,
+  flow: <path d="m17 2 4 4-4 4M3 11V9a3 3 0 0 1 3-3h15M7 22l-4-4 4-4M21 13v2a3 3 0 0 1-3 3H3" />,
+  scoring: <path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01" />,
+};
 const TABS = [
-  ["play", "🎾", "Match"],
-  ["rules", "📖", "Rules"],
-  ["flow", "🔄", "Flow"],
-  ["scoring", "🔢", "Scoring"],
+  ["play", "Match"],
+  ["rules", "Rules"],
+  ["flow", "Flow"],
+  ["scoring", "Scoring"],
 ] as const;
 
 export default function Home() {
   const [tab, setTab] = useState<(typeof TABS)[number][0]>("play");
   return (
-    <main className="grid h-dvh w-screen grid-rows-[9dvh_1fr_11dvh] overflow-hidden">
-      <header className="flex items-center justify-center bg-gray-900 text-xl font-black text-white">Padel Quick Start</header>
+    <main className="mx-auto grid h-dvh w-full max-w-lg grid-cols-[minmax(0,1fr)] grid-rows-[auto_minmax(0,1fr)_auto] overflow-hidden bg-[#eef2f7]">
+      <header className="flex items-center justify-center gap-2 bg-gradient-to-r from-ink to-[#173a73] px-4 py-3 text-white shadow-lg">
+        <span className="grid h-8 w-8 place-items-center rounded-full bg-ball text-ink shadow-inner">
+          <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2">{I.play}</svg>
+        </span>
+        <h1 className="text-xl font-black tracking-tight">Padel <span className="text-ball">Quick Start</span></h1>
+      </header>
       <div className="min-h-0">
-        {/* Play stays mounted so tab switches never lose state */}
+        {/* Play stays mounted so tab switches never lose the game */}
         <div className="h-full" hidden={tab !== "play"}><Play /></div>
         {tab !== "play" && <Reference tab={tab} />}
       </div>
-      <nav className="grid grid-cols-4 border-t-2 border-gray-900 bg-white">
-        {TABS.map(([id, icon, label]) => (
-          <button key={id} onClick={() => setTab(id)}
-            className={`flex min-h-11 flex-col items-center justify-center text-sm font-black ${tab === id ? "bg-yellow-300" : ""}`}>
-            <span className="text-2xl">{icon}</span>{label}
+      <nav className="grid grid-cols-4 gap-1 border-t border-slate-200 bg-white p-1.5 pb-[max(0.375rem,env(safe-area-inset-bottom))] shadow-[0_-4px_20px_rgba(0,0,0,0.06)]">
+        {TABS.map(([id, label]) => (
+          <button key={id} onClick={() => setTab(id)} aria-current={tab === id}
+            className={`flex min-h-14 flex-col items-center justify-center gap-0.5 rounded-2xl text-xs font-extrabold transition-colors ${tab === id ? "bg-ink text-ball" : "text-slate-600"}`}>
+            <svg viewBox="0 0 24 24" className="h-6 w-6" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">{I[id]}</svg>
+            {label}
           </button>
         ))}
       </nav>

@@ -1,4 +1,4 @@
-:HL["/paddle-score/_next/static/chunks/3nk6k-v_4pmef.css","style"]
+:HL["/paddle-score/_next/static/chunks/0iy9ktmm0fjfh.css","style"]
 2:[["children",{"s":"__PAGE__","h":160}]]
 1:[["children",{"s":"/_not-found","h":96,"c":"$Q2"}]]
-0:{"b":"kalkUeabCfKklw_reDUe2","t":{"t":{"s":"","h":80,"c":"$Q1"}}}
+0:{"b":"Ciks7TDkaiFnpmPHC5Cim","t":{"t":{"s":"","h":80,"c":"$Q1"}}}
