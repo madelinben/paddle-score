@@ -6,26 +6,12 @@ import {
   type Match, type Pair, type Team,
 } from "@/lib/match";
 
-const KEY = "padel-match";
+const KEY = "padel-setup"; // long-term: player names + rules; the match itself lives in state only
 type Saved = { m: Match | null; past: Match[] };
 
 export default function Play() {
   const [{ m, past }, setS] = useState<Saved>({ m: null, past: [] });
-  const [ready, setReady] = useState(false);
 
-  useEffect(() => {
-    try {
-      const raw = localStorage.getItem(KEY);
-      if (raw) setS(JSON.parse(raw));
-    } catch {}
-    setReady(true);
-  }, []);
-  useEffect(() => {
-    if (!ready) return;
-    try { localStorage.setItem(KEY, JSON.stringify({ m, past })); } catch {}
-  }, [m, past, ready]);
-
-  if (!ready) return null;
   if (!m) return <Setup onStart={(m) => setS({ m, past: [] })} />;
 
   const score = (t: Team) => setS({ m: point(m, t), past: [...past.slice(-199), { ...m, msg: null }] });
@@ -103,6 +89,18 @@ function Setup({ onStart }: { onStart: (m: Match) => void }) {
   const [first, setFirst] = useState(0);
   const [golden, setGolden] = useState(true);
 
+  useEffect(() => {
+    try {
+      const o = JSON.parse(localStorage.getItem(KEY) ?? "null");
+      if (o) { setNames(o.names); setGolden(o.golden); }
+    } catch {}
+  }, []);
+  const begin = () => {
+    const cfg = { golden, names: names.map((x, i) => x.trim() || `P${i + 1}`) };
+    try { localStorage.setItem(KEY, JSON.stringify(cfg)); } catch {}
+    onStart(start(cfg, first, right));
+  };
+
   return (
     <div className="h-full space-y-3 overflow-y-auto p-3">
       {([0, 1] as Team[]).map((t) => (
@@ -129,7 +127,7 @@ function Setup({ onStart }: { onStart: (m: Match) => void }) {
         <input type="checkbox" checked={golden} onChange={(e) => setGolden(e.target.checked)} className="h-6 w-6" />
         Golden point at 40-40 (off = advantage)
       </label>
-      <button onClick={() => onStart(start({ golden, names: names.map((x, i) => x.trim() || `P${i + 1}`) }, first, right))}
+      <button onClick={begin}
         className="min-h-14 w-full rounded-xl bg-gray-900 text-lg font-black text-white">
         Start match
       </button>
