@@ -1,4 +1,4 @@
-import { curServer, other, partner, serveSide, teamOf, type Match, type Side, type Team } from "@/lib/match";
+import { curServer, other, partner, serveSide, teamOf, type Match, type Side, type Team } from "../lib/match";
 
 export const COLORS = ["#1d4ed8", "#ea580c"]; // team 0 blue, team 1 orange
 
@@ -41,7 +41,7 @@ export default function Court({ m }: { m: Match }) {
       <rect x="-10" y="-6" width="120" height="212" rx="6" fill="#15803d" />
       <rect x="-3" y="-3" width="106" height="206" rx="3" fill="#bfdbfe" opacity="0.5" />
       <rect x="0" y="0" width="100" height="200" fill="url(#court)" />
-      <rect x={boxX} y={boxY} width="50" height="69.5" fill="#d9f100" opacity="0.4" className="pulse" />
+      <rect x={boxX} y={boxY} width="50" height="69.5" fill="#d9f100" opacity="0.4" className="pd-pulse" />
       <g stroke="#fff" strokeWidth="1.1" fill="none">
         <rect x="0" y="0" width="100" height="200" />
         <line x1="0" y1="30.5" x2="100" y2="30.5" />

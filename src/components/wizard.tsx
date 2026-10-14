@@ -1,15 +1,15 @@
 "use client";
 import { useEffect, useState, type ReactNode } from "react";
 import { COLORS } from "./court";
-import { other, partner, start, type Match, type Pair, type Team } from "@/lib/match";
+import { other, partner, start, type Match, type Pair, type Team } from "../lib/match";
 
 const KEY = "padel-setup"; // long-term: player names + rules; the match itself lives in state only
-const BG = ["bg-ta", "bg-tb"];
+const BG = ["bg-pd-ta", "bg-pd-tb"];
 type Stage = "names" | "spin" | "choose" | "end" | "sr" | "positions";
 const ORDER: Stage[] = ["names", "spin", "choose", "end", "sr", "positions"];
 
 const Big = ({ onClick, children, color, sub }: { onClick: () => void; children: ReactNode; color?: string; sub?: string }) => (
-  <button onClick={onClick} className={`min-h-16 w-full rounded-2xl px-4 text-left text-lg font-black shadow-md ${color ?? "bg-white text-ink ring-1 ring-slate-200"}`}>
+  <button onClick={onClick} className={`min-h-16 w-full rounded-2xl px-4 text-left text-lg font-black shadow-md ${color ?? "bg-white text-pd-ink ring-1 ring-slate-200"}`}>
     {children}
     {sub && <span className="block text-xs font-semibold opacity-80">{sub}</span>}
   </button>
@@ -60,7 +60,7 @@ export default function Wizard({ onStart }: { onStart: (m: Match) => void }) {
       <div className="flex items-center gap-2 px-3 pt-3">
         {hist.length > 0 && <button onClick={back} className="min-h-11 rounded-xl bg-slate-200 px-3 text-sm font-extrabold">← Back</button>}
         <div className="ml-auto flex gap-1.5" aria-label={`Step ${step} of ${ORDER.length}`}>
-          {ORDER.map((s, i) => <span key={s} className={`h-2 w-6 rounded-full ${i < step ? "bg-ink" : "bg-slate-300"}`} />)}
+          {ORDER.map((s, i) => <span key={s} className={`h-2 w-6 rounded-full ${i < step ? "bg-pd-ink" : "bg-slate-300"}`} />)}
         </div>
       </div>
 
@@ -77,7 +77,7 @@ export default function Wizard({ onStart }: { onStart: (m: Match) => void }) {
                     <input value={names[p]} maxLength={12} aria-label={`Player ${p + 1} name`}
                       onChange={(e) => setNames((n) => n.map((x, i) => (i === p ? e.target.value : x)))}
                       onFocus={(e) => e.target.select()}
-                      className="min-h-11 min-w-0 flex-1 rounded-xl border-2 border-slate-200 bg-slate-50 px-3 text-base font-bold outline-none focus:border-ink" />
+                      className="min-h-11 min-w-0 flex-1 rounded-xl border-2 border-slate-200 bg-slate-50 px-3 text-base font-bold outline-none focus:border-pd-ink" />
                   </div>
                 ))}
               </div>
@@ -88,8 +88,8 @@ export default function Wizard({ onStart }: { onStart: (m: Match) => void }) {
                 <span className="block text-base font-black">Golden point</span>
                 <span className="block text-xs font-medium text-slate-600">{golden ? "At 40-40 the next point wins" : "At 40-40 play advantage (win by 2)"}</span>
               </span>
-              <span className={`flex h-8 w-14 items-center rounded-full p-1 transition-colors ${golden ? "bg-ink" : "bg-slate-300"}`}>
-                <span className={`h-6 w-6 rounded-full transition-transform ${golden ? "translate-x-6 bg-ball" : "bg-white"}`} />
+              <span className={`flex h-8 w-14 items-center rounded-full p-1 transition-colors ${golden ? "bg-pd-ink" : "bg-slate-300"}`}>
+                <span className={`h-6 w-6 rounded-full transition-transform ${golden ? "translate-x-6 bg-pd-ball" : "bg-white"}`} />
               </span>
             </button>
           </>
@@ -110,7 +110,7 @@ export default function Wizard({ onStart }: { onStart: (m: Match) => void }) {
             <Big onClick={() => { const s = pickServe(chooser, true); setEndPicker(other(chooser)); void s; go("end"); }} sub={`${T(other(chooser))} then pick the court end`}>🎾 Serve first</Big>
             <Big onClick={() => { pickServe(chooser, false); setEndPicker(other(chooser)); go("end"); }} sub={`${T(other(chooser))} then pick the court end`}>🛡️ Receive first</Big>
             <Big onClick={() => { setServeTeam(null); setEndPicker(chooser); go("end"); }} sub={`${T(other(chooser))} then choose serve or receive`}>↔️ Choose the court end</Big>
-            <Big onClick={() => setChooser(other(chooser))} color="bg-slate-200 text-ink" sub={`Pass the choice to ${T(other(chooser))}`}>🤝 Let the opponents choose</Big>
+            <Big onClick={() => setChooser(other(chooser))} color="bg-slate-200 text-pd-ink" sub={`Pass the choice to ${T(other(chooser))}`}>🤝 Let the opponents choose</Big>
           </>
         )}
 
@@ -158,7 +158,7 @@ export default function Wizard({ onStart }: { onStart: (m: Match) => void }) {
               <div className="grid grid-cols-2 gap-2">
                 {[2 * serveTeam, 2 * serveTeam + 1].map((p) => (
                   <button key={p} onClick={() => setFirst(p)} aria-pressed={firstServer === p}
-                    className={`min-h-12 rounded-xl text-base font-black ${firstServer === p ? "bg-ball ring-2 ring-ink" : "bg-slate-100"}`}>🎾 {names[p]}</button>
+                    className={`min-h-12 rounded-xl text-base font-black ${firstServer === p ? "bg-pd-ball ring-2 ring-pd-ink" : "bg-slate-100"}`}>🎾 {names[p]}</button>
                 ))}
               </div>
             </div>
@@ -175,12 +175,12 @@ export default function Wizard({ onStart }: { onStart: (m: Match) => void }) {
 }
 
 const Next = ({ onClick, children }: { onClick: () => void; children: ReactNode }) => (
-  <button onClick={onClick} className="min-h-14 w-full rounded-2xl bg-ink text-lg font-black text-ball shadow-xl">{children}</button>
+  <button onClick={onClick} className="min-h-14 w-full rounded-2xl bg-pd-ink text-lg font-black text-pd-ball shadow-xl">{children}</button>
 );
 
 const Head = ({ icon, title, text }: { icon: string; title: string; text: ReactNode }) => (
   <div className="flex items-start gap-3">
-    <span className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-ball text-2xl shadow-inner">{icon}</span>
+    <span className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-pd-ball text-2xl shadow-inner">{icon}</span>
     <div>
       <h2 className="text-2xl font-black leading-tight">{title}</h2>
       <p className="text-sm font-medium text-slate-600">{text}</p>

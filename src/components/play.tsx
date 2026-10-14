@@ -5,10 +5,10 @@ import Court, { COLORS } from "./court";
 import {
   curServer, goldenPoint, pickGoldenSide, point, pointLabels, receiverFor, serveSide, serveStep, setRight, shift, teamName, teamOf,
   type Match, type Pair, type Side, type Team,
-} from "@/lib/match";
+} from "../lib/match";
 
 type Saved = { m: Match | null; past: Match[] };
-const TEAM = ["bg-ta", "bg-tb"];
+const TEAM = ["bg-pd-ta", "bg-pd-tb"];
 
 export default function Play() {
   const [{ m, past }, setS] = useState<Saved>({ m: null, past: [] });
@@ -39,10 +39,10 @@ export default function Play() {
               <div className="truncate">{n[2 * t]}</div>
               <div className="truncate">{n[2 * t + 1]}</div>
             </div>
-            {teamOf(server) === t && <span className="grid h-5 w-5 place-items-center rounded-full bg-ball text-[11px] shadow ring-1 ring-ink/30" title="Serving">🎾</span>}
+            {teamOf(server) === t && <span className="grid h-5 w-5 place-items-center rounded-full bg-pd-ball text-[11px] shadow ring-1 ring-pd-ink/30" title="Serving">🎾</span>}
             {m.sets.map((s, i) => <span key={i} className="w-7 text-center text-lg font-bold text-slate-400">{s[t]}</span>)}
             <span className="w-9 text-center text-3xl short:text-2xl font-black tabular-nums">{m.games[t]}</span>
-            <span className="w-14 rounded-xl bg-ink py-0.5 text-center text-3xl short:text-2xl font-black tabular-nums text-ball">{labels[t]}</span>
+            <span className="w-14 rounded-xl bg-pd-ink py-0.5 text-center text-3xl short:text-2xl font-black tabular-nums text-pd-ball">{labels[t]}</span>
           </div>
         ))}
       </div>
@@ -54,11 +54,11 @@ export default function Play() {
           <p className="w-full text-center text-lg font-black">🏆 {teamName(m, m.winner)} win the match!</p>
         ) : (
           <>
-            <span className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-ball text-lg shadow-inner short:hidden">🎾</span>
+            <span className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-pd-ball text-lg shadow-inner short:hidden">🎾</span>
             <p className="text-sm font-bold leading-tight">
               {m.note && <span className="mb-0.5 block text-xs font-semibold text-slate-500 short:hidden">{m.note}</span>}
               <span className="font-black">{n[server]}</span> serves from the{" "}
-              <span className="rounded bg-ink px-1.5 py-0.5 text-xs font-black text-ball">{serveSide(m) === "R" ? "RIGHT" : "LEFT"}</span>{" "}
+              <span className="rounded bg-pd-ink px-1.5 py-0.5 text-xs font-black text-pd-ball">{serveSide(m) === "R" ? "RIGHT" : "LEFT"}</span>{" "}
               to <span className="font-black">{n[recv]}</span>
               {m.tb && <span className="ml-1 rounded bg-amber-300 px-1.5 py-0.5 text-xs font-black">TIE-BREAK</span>}
               {goldenPoint(m) && <span className="ml-1 rounded bg-amber-300 px-1.5 py-0.5 text-xs font-black">GOLDEN POINT · receivers pick side</span>}
@@ -69,7 +69,7 @@ export default function Play() {
 
       {m.winner !== null ? (
         <div className="grid grid-cols-[1fr_auto] gap-2 wide:col-start-2 wide:row-start-4">
-          <button onClick={() => setS({ m: null, past: [] })} className="min-h-16 rounded-2xl bg-ink text-lg font-black text-ball shadow-lg">New match →</button>
+          <button onClick={() => setS({ m: null, past: [] })} className="min-h-16 rounded-2xl bg-pd-ink text-lg font-black text-pd-ball shadow-lg">New match →</button>
           <button onClick={undo} disabled={!past.length} className="min-h-16 rounded-2xl bg-slate-200 px-4 text-sm font-extrabold">↶ Undo</button>
         </div>
       ) : (
@@ -82,15 +82,15 @@ export default function Play() {
           </button>
         ))}
         <div className="grid gap-1.5">
-          <button onClick={undo} disabled={!past.length} className="min-h-[30px] rounded-xl bg-ink px-3 text-sm font-extrabold text-white disabled:opacity-30">↶ Undo</button>
+          <button onClick={undo} disabled={!past.length} className="min-h-[30px] rounded-xl bg-pd-ink px-3 text-sm font-extrabold text-white disabled:opacity-30">↶ Undo</button>
           <button onClick={reset} className="min-h-[30px] rounded-xl bg-slate-200 px-3 text-sm font-extrabold text-slate-700">New</button>
         </div>
       </div>
       )}
 
       {step && (
-        <div role="dialog" aria-modal="true" aria-label="Prompt" className="fixed inset-0 z-10 flex items-end justify-center bg-ink/70 p-3 backdrop-blur-sm sm:items-center">
-          <div key={m.steps.length} className="flex max-h-[92dvh] w-full max-w-sm animate-sheet flex-col rounded-3xl bg-white p-5 shadow-2xl wide:max-w-md">
+        <div role="dialog" aria-modal="true" aria-label="Prompt" className="fixed inset-0 z-10 flex items-end justify-center bg-pd-ink/70 p-3 backdrop-blur-sm sm:items-center">
+          <div key={m.steps.length} className="flex max-h-[92dvh] w-full max-w-sm animate-pd-sheet flex-col rounded-3xl bg-white p-5 shadow-2xl wide:max-w-md">
             <StepCard m={m} onNext={next} />
           </div>
         </div>
@@ -110,7 +110,7 @@ function StepCard({ m, onNext }: { m: Match; onNext: (m: Match) => void }) {
   return (
     <div className="flex min-h-0 flex-col">
       <div className="mb-1 flex shrink-0 items-center justify-between">
-        <span className="grid h-12 w-12 place-items-center rounded-2xl bg-ball text-2xl">{step.icon}</span>
+        <span className="grid h-12 w-12 place-items-center rounded-2xl bg-pd-ball text-2xl">{step.icon}</span>
         {m.steps.length > 1 && <span className="rounded-full bg-slate-100 px-2.5 py-1 text-xs font-extrabold text-slate-600">{m.steps.length} prompts left</span>}
       </div>
       <h2 className="shrink-0 text-2xl font-black leading-tight">{title}</h2>
@@ -123,7 +123,7 @@ function StepCard({ m, onNext }: { m: Match; onNext: (m: Match) => void }) {
       {step.pick === "golden" && (
         <div className="grid grid-cols-2 gap-2">
           {(["L", "R"] as Side[]).map((sd) => (
-            <button key={sd} onClick={() => onNext(shift(pickGoldenSide(m, sd)))} className="min-h-16 rounded-2xl bg-ink px-2 text-ball shadow-lg">
+            <button key={sd} onClick={() => onNext(shift(pickGoldenSide(m, sd)))} className="min-h-16 rounded-2xl bg-pd-ink px-2 text-pd-ball shadow-lg">
               <span className="block text-xs font-extrabold opacity-80">{sd === "R" ? "RIGHT" : "LEFT"} side</span>
               <span className="block truncate text-base font-black">{m.cfg.names[receiverFor(m, sd)]} receives</span>
             </button>
@@ -142,12 +142,12 @@ function StepCard({ m, onNext }: { m: Match; onNext: (m: Match) => void }) {
               <button onClick={() => setR((r) => r.map((x, i) => (i === t ? x ^ 1 : x)) as Pair)} className="min-h-11 rounded-xl bg-white px-3 text-sm font-extrabold shadow">⇄</button>
             </div>
           ))}
-          <button onClick={() => onNext(shift(setRight(m, right)))} className="min-h-14 w-full rounded-2xl bg-ink text-lg font-black text-ball shadow-lg">Confirm positions</button>
+          <button onClick={() => onNext(shift(setRight(m, right)))} className="min-h-14 w-full rounded-2xl bg-pd-ink text-lg font-black text-pd-ball shadow-lg">Confirm positions</button>
         </>
       )}
 
       {!step.pick || step.pick === "serve" ? (
-        <button onClick={() => onNext(shift(m))} className="min-h-14 w-full rounded-2xl bg-ink text-lg font-black text-ball shadow-lg">
+        <button onClick={() => onNext(shift(m))} className="min-h-14 w-full rounded-2xl bg-pd-ink text-lg font-black text-pd-ball shadow-lg">
           {step.pick === "serve" ? "Ready: play!" : last ? "Got it" : "Next →"}
         </button>
       ) : null}
