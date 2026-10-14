@@ -4,7 +4,12 @@ export type Pair = [number, number];
 export type Side = "R" | "L";
 // A prompt the players must confirm before play continues.
 // pick: "serve" = live serve instructions, "positions" = choose right/left, "golden" = receivers pick side.
-export type Step = { icon: string; title: string; lines: string[]; pick?: "serve" | "positions" | "golden" };
+export type Step = {
+  icon: string;
+  title: string;
+  lines: string[];
+  pick?: "serve" | "positions" | "golden";
+};
 export type Config = { golden: boolean; names: string[] };
 export type Match = {
   cfg: Config;
@@ -35,8 +40,20 @@ export function start(cfg: Config, first: number, right: Pair, top: Team = 1): M
   next[t] = partner(first);
   next[other(t)] = right[other(t)]; // receiving team's first server = their right player
   return {
-    cfg, sets: [], games: [0, 0], pts: [0, 0], tb: false, tbOrder: [],
-    server: first, next, right, top, winner: null, gpSide: null, steps: [SERVE], note: "",
+    cfg,
+    sets: [],
+    games: [0, 0],
+    pts: [0, 0],
+    tb: false,
+    tbOrder: [],
+    server: first,
+    next,
+    right,
+    top,
+    winner: null,
+    gpSide: null,
+    steps: [SERVE],
+    note: "",
   };
 }
 
@@ -103,7 +120,11 @@ function advance(m: Match): Match {
 const swapStep = (why: string): Step => ({
   icon: "↔️",
   title: "Swap ends",
-  lines: [why, "Both teams walk to the opposite end of the court", "Keep your own right/left sides"],
+  lines: [
+    why,
+    "Both teams walk to the opposite end of the court",
+    "Keep your own right/left sides",
+  ],
 });
 
 function endGame(m: Match, t: Team): Match {
@@ -114,23 +135,48 @@ function endGame(m: Match, t: Team): Match {
   const top = odd ? other(m.top) : m.top;
   const A = teamName(m, t);
   const steps: Step[] = [
-    { icon: "✅", title: `Game to ${A}`, lines: [m.tb ? `Tie-break won ${m.pts[0]}–${m.pts[1]}` : `Games: ${games[0]}–${games[1]}`] },
+    {
+      icon: "✅",
+      title: `Game to ${A}`,
+      lines: [m.tb ? `Tie-break won ${m.pts[0]}–${m.pts[1]}` : `Games: ${games[0]}–${games[1]}`],
+    },
   ];
-  const base = { ...m, pts: [0, 0] as Pair, tb: false, tbOrder: [] as number[], top, gpSide: null, note: "" };
+  const base = {
+    ...m,
+    pts: [0, 0] as Pair,
+    tb: false,
+    tbOrder: [] as number[],
+    top,
+    gpSide: null,
+    note: "",
+  };
   const swap = () => odd && steps.push(swapStep(`${games[0] + games[1]} games played: odd total`));
 
   if (setOver) {
     const sets = [...m.sets, games];
     const won: Pair = [0, 0];
-    sets.forEach((s) => won[s[0] > s[1] ? 0 : 1]++);
+    for (const s of sets) won[s[0] > s[1] ? 0 : 1]++;
     const line = sets.map((s) => `${s[0]}–${s[1]}`).join(", ");
     if (won[t] === 2) {
-      steps.push({ icon: "🏆", title: `${A} win the match!`, lines: [`Sets: ${line}`, "Shake hands, great game!"] });
+      steps.push({
+        icon: "🏆",
+        title: `${A} win the match!`,
+        lines: [`Sets: ${line}`, "Shake hands, great game!"],
+      });
       return { ...base, sets, games: [0, 0], winner: t, steps };
     }
     swap();
-    steps.push({ icon: "🏅", title: `Set to ${A}`, lines: [`Set scores: ${line}`, `Sets won: ${won[0]}–${won[1]}`] });
-    steps.push({ icon: "📍", title: "New set: choose positions", lines: ["Each team decides who plays right and who plays left for this set"], pick: "positions" });
+    steps.push({
+      icon: "🏅",
+      title: `Set to ${A}`,
+      lines: [`Set scores: ${line}`, `Sets won: ${won[0]}–${won[1]}`],
+    });
+    steps.push({
+      icon: "📍",
+      title: "New set: choose positions",
+      lines: ["Each team decides who plays right and who plays left for this set"],
+      pick: "positions",
+    });
     steps.push(SERVE);
     return { ...advance({ ...base, sets, games: [0, 0] }), steps };
   }
@@ -143,7 +189,12 @@ function endGame(m: Match, t: Team): Match {
     steps.push({
       icon: "⚡",
       title: "Tie-break at 6-6",
-      lines: ["First to 7 points, win by 2", "First server serves 1 point, then each player serves 2 in turn", "Server alternates right/left every point", "Swap ends every 6 points"],
+      lines: [
+        "First to 7 points, win by 2",
+        "First server serves 1 point, then each player serves 2 in turn",
+        "Server alternates right/left every point",
+        "Swap ends every 6 points",
+      ],
     });
   }
   steps.push(SERVE);
@@ -172,7 +223,10 @@ export function point(m: Match, t: Team): Match {
     n.steps.push({
       icon: "⭐",
       title: "Golden point!",
-      lines: ["40-40: the next point wins the game", "The receiving team chooses which side to receive"],
+      lines: [
+        "40-40: the next point wins the game",
+        "The receiving team chooses which side to receive",
+      ],
       pick: "golden",
     });
   }

@@ -1,11 +1,25 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { curServer, goldenPoint, pickGoldenSide, point, receiverFor, serveSide, serveStep, start, type Match, type Team } from "./match.ts";
+import {
+  curServer,
+  goldenPoint,
+  type Match,
+  pickGoldenSide,
+  point,
+  receiverFor,
+  serveSide,
+  serveStep,
+  start,
+  type Team,
+} from "./match.ts";
 
 const cfg = (golden: boolean) => ({ golden, names: ["a1", "a2", "b1", "b2"] });
 const ok = (m: Match): Match => ({ ...m, steps: [] }); // user confirms every prompt
 const p = (m: Match, t: Team) => point(ok(m), t);
-const game = (m: Match, t: Team) => { for (let i = 0; i < 4; i++) m = p(m, t); return m; };
+const game = (m: Match, t: Team) => {
+  for (let i = 0; i < 4; i++) m = p(m, t);
+  return m;
+};
 
 test("prompts block scoring until confirmed", () => {
   const m = start(cfg(true), 0, [0, 2]);
@@ -44,7 +58,10 @@ test("server rotates, ends swap on odd games, side alternates, prompts queued in
   assert.equal(serveSide(m), "L");
   for (let i = 0; i < 3; i++) m = p(m, 0); // 4th point wins the game
   assert.equal(m.games[0], 1);
-  assert.deepEqual(m.steps.map((s) => s.title), ["Game to a1 & a2", "Swap ends", ""]);
+  assert.deepEqual(
+    m.steps.map((s) => s.title),
+    ["Game to a1 & a2", "Swap ends", ""]
+  );
   assert.equal(m.top, 0);
   assert.equal(m.server, 2);
   assert.match(serveStep(m).lines[0], /^b1 serves from the RIGHT/);
@@ -57,7 +74,10 @@ test("server rotates, ends swap on odd games, side alternates, prompts queued in
 
 test("6-6 tie-break, rotation, swap every 6, set + match win", () => {
   let m = start(cfg(true), 0, [0, 2]);
-  for (let i = 0; i < 5; i++) { m = game(m, 0); m = game(m, 1); }
+  for (let i = 0; i < 5; i++) {
+    m = game(m, 0);
+    m = game(m, 1);
+  }
   m = game(m, 0);
   m = game(m, 1);
   assert.equal(m.tb, true);
