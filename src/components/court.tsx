@@ -57,7 +57,7 @@ export default function Court({ m }: { m: Match }) {
           markerHeight="5"
           orient="auto"
         >
-          <path d="M0 0 10 5 0 10z" fill="#f97316" />
+          <path d="M0 0 10 5 0 10z" fill="#d9f100" />
         </marker>
       </defs>
       <rect x="-10" y="-6" width="120" height="212" rx="6" fill="#15803d" />
@@ -68,7 +68,7 @@ export default function Court({ m }: { m: Match }) {
         y={boxY}
         width="50"
         height="69.5"
-        fill="#f97316"
+        fill="#d9f100"
         opacity="0.4"
         className="pd-pulse"
       />
@@ -78,7 +78,7 @@ export default function Court({ m }: { m: Match }) {
         <line x1="0" y1="169.5" x2="100" y2="169.5" />
         <line x1="50" y1="30.5" x2="50" y2="169.5" />
       </g>
-      <rect x="-3" y="98.6" width="106" height="2.8" rx="1" fill="#0f172a" />
+      <rect x="-3" y="98.6" width="106" height="2.8" rx="1" fill="#0b1d3a" />
       <line
         x1="-3"
         y1="98.6"
@@ -93,7 +93,7 @@ export default function Court({ m }: { m: Match }) {
         y1={sp.y}
         x2={rp.x}
         y2={rp.y}
-        stroke="#f97316"
+        stroke="#d9f100"
         strokeWidth="1.6"
         strokeDasharray="3 3"
         markerEnd="url(#arrow)"
@@ -115,18 +115,18 @@ export default function Court({ m }: { m: Match }) {
             <circle
               r="9"
               fill={COLORS[teamOf(p)]}
-              stroke={isS ? "#f97316" : "#fff"}
+              stroke={isS ? "#d9f100" : "#fff"}
               strokeWidth={isS || isR ? 2.6 : 1.4}
             />
             <text textAnchor="middle" dy="2.6" fontSize="7.5" fontWeight="800" fill="#fff">
               {m.cfg.names[p].slice(0, 2).toUpperCase()}
             </text>
-            <rect x={-w / 2} y="12" width={w} height="8" rx="4" fill="#0f172a" opacity="0.85" />
+            <rect x={-w / 2} y="12" width={w} height="8" rx="4" fill="#0b1d3a" opacity="0.85" />
             <text y="17.8" textAnchor="middle" fontSize="5" fontWeight="700" fill="#fff">
               {m.cfg.names[p]}
             </text>
             {isS && (
-              <circle cx="9" cy="-8" r="3.6" fill="#f97316" stroke="#0f172a" strokeWidth="0.8" />
+              <circle cx="9" cy="-8" r="3.6" fill="#d9f100" stroke="#0b1d3a" strokeWidth="0.8" />
             )}
             {isR && (
               <text
@@ -135,7 +135,7 @@ export default function Court({ m }: { m: Match }) {
                 fontSize="5"
                 fontWeight="800"
                 fill="#fff"
-                stroke="#0f172a"
+                stroke="#0b1d3a"
                 strokeWidth="1.2"
                 paintOrder="stroke"
               >
